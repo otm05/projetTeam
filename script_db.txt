@@ -1,0 +1,126 @@
+--creation table Entreprises :
+
+create table Entreprises(
+codeEntr varchar(20) Primary Key not null,
+nomEntr varchar(80) not null,
+description varchar(255) null,
+secteurEntr varchar(50) null,
+adresse varchar(255) not null,
+ville varchar(80) not null,
+codePostal varchar(10) null,
+pays varchar(80) not null,
+email varchar(150) null,
+fixe varchar(15) null,
+fax varchar(15) null,
+siteWeb varchar(150) null,
+fullNameContact varchar(100) null,
+gsmContact varchar(15) null,
+logoEntr varchar(50) null,
+etatEntr varchar(3) not null check(etatEntr in('A','D','AC','R','E'))
+);
+
+
+--creation table Universites :
+create table Universites(
+codeUnv varchar(20) not null,
+codeEntrFk varchar(20) not null,
+nomUnv varchar(80) not null,
+description varchar(255) null,
+adresse varchar(255) not null,
+ville varchar(80) not null,
+codePostal varchar(10) null,
+pays varchar(80) not null,
+email varchar(150) null,
+fix varchar(15) null,
+fax varchar(15) null,
+siteWeb varchar(150) null,
+wtspUnv varchar(100) null,
+logoUnv varchar(50) null,
+EtatUnv varchar(3) not null
+);
+
+--foreign key & primary & constraint key :
+ALTER TABLE Universites ADD constraint check_etatUnv check(EtatUnv in('A','D'));
+ALTER TABLE Universites ADD PRIMARY KEY (codeUnv,codeEntrFk);
+ALTER TABLE Universites ADD foreign key (codeEntrFk) references Entreprises(codeEntr) on delete cascade on update cascade;
+
+
+--creation table Facultes :
+create table Facultes(
+codeFac varchar(20) not null,
+codeUFK1 varchar(20) not null,
+codeUFK2 varchar(20) not null,
+nomFac varchar(80) not null,
+description varchar(255) null,
+secteurFac varchar(50) null,
+adresse varchar(255) not null,
+ville varchar(80) not null,
+codePostal varchar(10) null,
+pays varchar(80) not null,
+email varchar(150) null,
+fix varchar(15) null,
+fax varchar(15) null,
+siteWeb varchar(150) null,
+wtspFac varchar(100) null,
+logoFac varchar(50) null,
+etatFac varchar(3) not null check(etatFac in('A','D')) 
+);
+
+--foreign key & primary & constraint key :
+ALTER TABLE Facultes ADD PRIMARY KEY (codeFac,codeUFK1);
+ALTER TABLE Facultes ADD foreign key (codeUFK1,codeUFK2) references universites(codeEntrFk,codeUnv) on delete cascade on update cascade;
+
+--creation table Etablissements :
+create table Etablissements(
+codeEtb varchar(20) not null,
+codeFFK1 varchar(20) not null,
+codeFFK2 varchar(20) not null,
+nomEtab varchar(80) not null,
+description varchar(255) null,
+secteurEtb varchar(50) null,
+adresse varchar(255) not null,
+ville varchar(80) not null,
+codePostal varchar(10) null,
+pays varchar(80) not null,
+email varchar(150) null,
+fix varchar(15) null,
+fax varchar(15) null,
+siteWeb varchar(150) null,
+wtspEtab varchar(100) null,
+etatEtb varchar(3) not null check(etatEtb in('A','D'))
+);
+
+--foreign key & primary & constraint key :
+ALTER TABLE Etablissements ADD PRIMARY KEY (codeEtb,codeFFK1);
+
+--probleme de cette foreign key :
+--//ALTER TABLE Etablissements ADD foreign key (codeFFK1,codeFFK2) references Facultes(codeUFK1,codeFac) on delete cascade on update cascade;
+
+--------------------------------------jeux-----------------------------------------------
+
+-- insertions for tables :
+--
+INSERT INTO Entreprises (codeEntr,nomEntr,description,adresse,ville,codePostal,pays,email,fixe,fax,siteWeb,fullNameContact,gsmContact,logoEntr,EtatEntr)
+VALUES
+('Entreprise1','SupMTI-Meknes','Ecole Superieur de Management Telecommunication et d Informatique','Marché central â coté de centre d appel web help','Meknes','50000','Maroc','supmti.meknes@gmail.com','1234456789','1234456789','supmti.ac.ma','EcoleSupMTI','987654321','logoSUPMTI','A'),
+('Entreprise2','ESISA','Ecole Supérieure d Ingénierie En Sciences Appliquées','29 bis avenue Ibn Khatib, route D imouzzer','Fes','30000','Maroc','esisa.fes@gmail.com','12341234','12341234','esisa.Ac.ma','ESISA-fes','987654321','logoESISA','A'),
+('Entreprise3','supManagement','Ecole supérieure de management de commerce et d´informatique.','228, Place du 11 Janvier, v.n','Fes','30000','Maroc','contact@supmanagement.ma','535 65 27 32','123412535 65 27 3234','www.supmanagement.ma','ESISA-fes','535 65 27 32','logosupmge','A');
+
+INSERT INTO universites (codeUnv,codeEntrFk,nomUnv,description,adresse,ville,codePostal,pays,email,fix,fax,siteWeb,wtspUnv,logoUnv,EtatUnv)
+VALUES
+('universites1','Entreprise1','Ecole Superieur de Management Telecommunication et d Informatique','Marché central â coté de centre d appel web help','hay nahda','MEKNES','309998','Maroc','supmtddsqi.meknes@gmail.com','1234456789','1234456789','supmti.ac.ma','0666666655','logoSUPMTI','A'),
+('universites2','Entreprise1','Ecole Superieur de Management Telecommunication et d Informatique','Marché central â coté de centre d appel web help','hay saada','FES','309998','Maroc','supmti.mekdnes@gmail.com','1234456789','1234456789','supmti.ac.ma','0666666655','logoSUPMTI','A'),
+('universites3','Entreprise1','Ecole Superieur de Management Telecommunication et d Informatique','Marché central â coté de centre d appel web help','hay amal','CASABLANCA','309998','Maroc','supddmti.meknes@gmail.com','1234456789','1234456789','supmti.ac.ma','0666666655','logoSUPMTI','D'),
+('universites4','Entreprise2','Ecole Superieur de Management Telecommunication et d Informatique','Marché central â coté de centre d appel web help','hay nor','FES','309998','Maroc','supmtssi.meknes@gmail.com','1234456789','1234456789','supmti.ac.ma','0666666655','logoSUPMTI','A'),
+('universites5','Entreprise3','Ecole Superieur de Management Telecommunication et d Informatique','Marché central â coté de centre d appel web help','hay al fath','MARRAKECH','309998','Maroc','supmti.meknes@gmail.com','1234456789','1234456789','supmti.ac.ma','0666666655','logoSUPMTI','D');
+
+INSERT INTO Facultes (codeFac,codeUFK1,codeUFK2,nomFac,description,secteurFac,adresse,ville,codePostal,pays,email,fix,fax,siteWeb,wtspFac,logoFac,EtatFac)
+VALUES
+('fac1','Entreprise1','universites1','EcDFF','Marché central â coté de centre d appel web help','Finance','hay nahda','MEKNES','309998','Maroc','supmtddsqi.meknes@gmail.com','1234456789','1234456789','supmti.ac.ma','0666666655','logoSUPMTI','A'),
+('fac2','Entreprise1','universites2','FAVSD','Marché central â coté de centre d appel web help','Informatique','hay saada','FES','309998','Maroc','supmti.mekdnes@gmail.com','1234456789','1234456789','supmti.ac.ma','0666666655','logoSUPMTI','D'),
+('fac3','Entreprise3','universites5','FACYEJS','Marché central â coté de centre d appel web help','Multimedia','hay amal','CASABLANCA','309998','Maroc','supddmti.meknes@gmail.com','1234456789','1234456789','supmti.ac.ma','0666666655','logoSUPMTI','A');
+
+INSERT INTO Etablissements (codeEtb,codeFFK1,codeFFK2,nomEtab,description,secteurEtb,adresse,ville,codePostal,pays,email,fix,fax,siteWeb,wtspEtab,etatEtb)
+VALUES
+('etab1','Entreprise3','fac3','EcDFF','Marché central â coté de centre d appel web help','DRR','hay nahda','MEKNES','309998','Maroc','supmtddsqi.meknes@gmail.com','1234456789','1234456789','supmti.ac.ma','0666666655','A'),
+('etab2','Entreprise1','fac1','FAVSD','Marché central â coté de centre d appel web help','Informatique','hay saada','FES','309998','Maroc','supmti.mekdnes@gmail.com','1234456789','1234456789','supmti.ac.ma','0666666655','D');
